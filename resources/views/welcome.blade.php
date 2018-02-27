@@ -8,6 +8,8 @@
                     <div class="col-ld-6">
                         @if (count($articles) > 0)
                             @include('articles.article_list', ['articles' => $articles])
+                        @else
+                            <a href="{{ route('articles.create') }}">日記を投稿する</a>
                         @endif
                     </div>
                 </div>
