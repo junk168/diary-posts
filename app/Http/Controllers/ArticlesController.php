@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class WelcomeController extends Controller
+use App\User;
+
+class ArticlesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,6 +17,16 @@ class WelcomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+    {
+
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
         $data = [];
         if (\Auth::check()) {
@@ -26,17 +38,7 @@ class WelcomeController extends Controller
                 'articles' => $articles,
             ];
         }
-        return view('welcome', $data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return view('articles.articles', $data);
     }
 
     /**
@@ -47,7 +49,16 @@ class WelcomeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'body' => 'required|max:255',
+        ]);
+
+        $request->user()->articles()->create([
+            'title' => $request->title,
+            'body' => $request->body
+        ]);
+
+        return redirect('/');
     }
 
     /**
@@ -92,6 +103,12 @@ class WelcomeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $article = \App\Article::find($id);
+
+        if (\Auth::user()->id === $article->user_id) {
+            $article->delete();
+        }
+
+        return redirect()->back();
     }
 }

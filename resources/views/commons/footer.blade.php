@@ -1,3 +1,3 @@
 <footer>
-    <div class="text-center text-muted">Articles.</div>
+    <div class="text-center text-muted">Diary posts.</div>
 </footer>

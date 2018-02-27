@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class WelcomeController extends Controller
+use App\User;
+
+class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,17 +18,11 @@ class WelcomeController extends Controller
      */
     public function index()
     {
-        $data = [];
-        if (\Auth::check()) {
-            $user = \Auth::user();
-            $articles = $user->articles()->orderBy('created_at', 'desc')->paginate(3);
+        $users = User::all();
 
-            $data = [
-                'user' => $user,
-                'articles' => $articles,
-            ];
-        }
-        return view('welcome', $data);
+        return view('users.index', [
+            'users' => $users,
+        ]);
     }
 
     /**
